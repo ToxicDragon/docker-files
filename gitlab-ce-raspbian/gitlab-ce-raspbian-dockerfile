@@ -1,5 +1,5 @@
 FROM resin/rpi-raspbian:jessie-20160810
-MAINTAINER Chrsitian Ohrfandl
+MAINTAINER Chrsitian Ohrfandldco
 
 # Install required packages
 RUN apt-get update -q \
@@ -11,7 +11,7 @@ RUN apt-get update -q \
       apt-transport-https \
       vim \
       nano \
-      curl \
+      curl
 
 # Download & Install GitLab
 RUN curl -sS https://packages.gitlab.com/install/repositories/gitlab/raspberry-pi2/script.deb.sh | bash
