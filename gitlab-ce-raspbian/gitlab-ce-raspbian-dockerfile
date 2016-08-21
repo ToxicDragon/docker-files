@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:wheezy-20160810
+FROM resin/rpi-raspbian:jessie-20160810
 MAINTAINER Chrsitian Ohrfandl
 
 # Install required packages
