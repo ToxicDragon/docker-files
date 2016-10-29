@@ -13,6 +13,7 @@ RUN apt-get update \
         texlive-full \
         texlive-fonts-recommended \
         texlive-fonts-extra \
+        texlive-math-extra \
         texlive-xetex \
         texlive-luatex \
         latexmk \
