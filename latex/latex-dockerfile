@@ -21,6 +21,9 @@ RUN apt-get update \
         python-pygments \
         gnuplot \
         make \
+        python3 \
+        python3-pip \
+ && pip install pygments \
  && apt-get remove --yes \
         texlive-latex-base-doc \
         texlive-latex-recommended-doc \
