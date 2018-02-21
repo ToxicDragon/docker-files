@@ -1,4 +1,4 @@
-FROM ubuntu:zesty
+FROM ubuntu:bionic
 
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
@@ -21,6 +21,7 @@ RUN apt-get update \
         python-pygments \
         gnuplot \
         make \
+        inkscape\
  && apt-get remove --yes \
         texlive-latex-base-doc \
         texlive-latex-recommended-doc \
