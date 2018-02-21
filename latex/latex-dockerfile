@@ -2,6 +2,7 @@ FROM ubuntu:bionic
 
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
+        tzdata \
         lmodern \
         texlive-latex-base \
         texlive-lang-german \
