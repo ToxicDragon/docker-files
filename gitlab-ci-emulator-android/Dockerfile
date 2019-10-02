@@ -53,6 +53,7 @@ RUN mkdir -p $ANDROID_HOME/licenses/ \
   && echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
 
 #Install Android Tools
+RUN mkdir /root/.android
 RUN echo "" > /root/.android/repositories.cfg
 RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --update --verbose
 RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" --verbose
