@@ -1,9 +1,9 @@
-version: '3'
+version: '0.2'
 
 services:
   your_service:
-    container_name: emulator
-    image: "emulator"
+    container_name: android-emulator
+    image: "android-emulator"
     build:
       # Dockerfile location
       context: .
