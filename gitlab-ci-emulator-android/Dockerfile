@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL maintainer="Yorick van Zweeden"
+LABEL maintainer="Christian Ohrfandl"
 
 # Variables taken from variables.env
 ARG AVD_NAME
