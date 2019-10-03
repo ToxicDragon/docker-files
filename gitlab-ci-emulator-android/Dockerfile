@@ -76,3 +76,6 @@ RUN mkdir ~/.android/avd  && \
 
 # Copy scripts to container for running the emulator and creating a snapshot
 COPY scripts/* /
+RUN chmod +x ./commands-to-run-in-privileged-mode.sh
+RUN chmod +x ./android-wait-for-emulator
+RUN chmod +x ./create-snapshot.sh
