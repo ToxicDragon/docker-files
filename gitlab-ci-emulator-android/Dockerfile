@@ -1,81 +1,48 @@
 FROM ubuntu:18.04
 LABEL maintainer="Christian Ohrfandl"
 
-# Variables taken from variables.env
-ARG AVD_NAME
-ARG ANDROID_HOME
-ARG VERSION_COMPILE_VERSION
-ARG VERSION_SDK_TOOLS
+# Set environment (available in image and container)
+ENV ANDROID_HOME /opt/android
+ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator
 
-# Expect requires tzdata, which requires a timezone specified
-RUN ln -fs /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
+# Add emulator start scripts and make them executable
+ADD start-default-emulator.sh /opt
+ADD start-default-emulator-headless.sh /opt
+ADD start-default-emulator-headless-noaccel.sh /opt
+RUN chmod a+x /opt/start-default-emulator.sh
+RUN chmod a+x /opt/start-default-emulator-headless.sh
+RUN chmod a+x /opt/start-default-emulator-headless-noaccel.sh
 
-RUN apt-get -qq update && \
-      apt-get install -qqy --no-install-recommends \
-      bridge-utils \
-      bzip2 \
-      curl \
-      # expect: Passing commands to telnet
-      expect \
-      git-core \
-      html2text \
-      lib32gcc1 \
-      lib32ncurses5 \
-      lib32stdc++6 \
-      lib32z1 \
-      libc6-i386 \
-      libqt5svg5 \
-      libqt5widgets5 \
-      # libvirt-bin: Virtualisation for emulator
-      libvirt-bin \
-      openjdk-8-jdk \
-      # qemu-kvm: Hardware acceleration for emulator
-      qemu-kvm \
-      # telnet: Communicating with emulator
-      telnet \
-      # ubuntu-vm-builder: Building VM for emulator
-      ubuntu-vm-builder \
-      unzip \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Set timezone
+RUN ln -fs /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 
-# Configurating Java
-RUN rm -f /etc/ssl/certs/java/cacerts; \
-    /var/lib/dpkg/info/ca-certificates-java.postinst configure
-
-# Downloading SDK-tools (AVDManager, SDKManager, etc)
-RUN curl -s https://dl.google.com/android/repository/sdk-tools-linux-"${VERSION_SDK_TOOLS}".zip > /sdk.zip && \
-    unzip /sdk.zip -d /sdk && \
-    rm -v /sdk.zip
-
-# Add Android licences instead of acceptance
-RUN mkdir -p $ANDROID_HOME/licenses/ \
-  && echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license \
-  && echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
-
-#Install Android Tools
+# Misc. config
+RUN mkdir /opt/android
 RUN mkdir /root/.android
 RUN echo "" > /root/.android/repositories.cfg
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --update --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-24" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-28" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;28.0.2" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "emulator" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;android;m2repository" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;google;m2repository" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;google;google_play_services" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" --verbose
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2" --verbose
 
-# Download system image for compiled version (separate statement for build cache)
-RUN echo y | ${ANDROID_HOME}/tools/bin/sdkmanager "system-images;android-${VERSION_COMPILE_VERSION};google_apis;armeabi-v7a"
+# Update system and install needed applications
+RUN apt update
+RUN apt install openjdk-8-jdk wget unzip git curl -y
 
-# Create AVD
-RUN mkdir ~/.android/avd  && \
-      echo no | ${ANDROID_HOME}/tools/bin/avdmanager create avd -n ${AVD_NAME} -k "system-images;android-${VERSION_COMPILE_VERSION};google_apis;armeabi-v7a"
+# Download SDK
+RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -qO android-sdk.zip
+RUN unzip android-sdk.zip -d /opt/android
+RUN rm android-sdk.zip
 
-# Copy scripts to container for running the emulator and creating a snapshot
-COPY scripts/* /
-RUN chmod +x ./commands-to-run-in-privileged-mode.sh
-RUN chmod +x ./android-wait-for-emulator
-RUN chmod +x ./create-snapshot.sh
+# Download SDK files
+RUN echo "y" | sdkmanager "tools"
+RUN echo "y" | sdkmanager "platform-tools"
+RUN echo "y" | sdkmanager "build-tools;29.0.2"
+RUN echo "y" | sdkmanager "extras;android;m2repository"
+RUN echo "y" | sdkmanager "extras;google;m2repository"
+RUN echo "y" | sdkmanager "emulator"
+RUN echo "y" | sdkmanager "platforms;android-28"
+RUN echo "y" | sdkmanager "system-images;android-28;google_apis;x86"
+RUN echo "y" | sdkmanager --update
+
+# Create emulator
+RUN echo "no" | avdmanager create avd -n default -k "system-images;android-28;google_apis;x86" -c 100M -d 17
+
+# Remove unnecessary files
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
