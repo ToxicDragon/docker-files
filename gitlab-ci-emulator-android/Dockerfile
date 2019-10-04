@@ -9,9 +9,11 @@ ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}
 ADD start-default-emulator.sh /opt
 ADD start-default-emulator-headless.sh /opt
 ADD start-default-emulator-headless-noaccel.sh /opt
+ADD wait-for-emulator.sh /opt
 RUN chmod a+x /opt/start-default-emulator.sh
 RUN chmod a+x /opt/start-default-emulator-headless.sh
 RUN chmod a+x /opt/start-default-emulator-headless-noaccel.sh
+RUN chmod a+x /opt/wait-for-emulator.sh
 
 # Set timezone
 RUN ln -fs /usr/share/zoneinfo/Europe/Vienna /etc/localtime
