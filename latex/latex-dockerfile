@@ -9,6 +9,20 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 RUN dpkg-reconfigure tzdata
 RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests \
         texlive-full \
+        exlive-latex-base \
+        texlive-lang-german \
+        texlive-lang-english \
+        texlive-binaries \
+        texlive-latex-extra \
+        texlive-generic-extra \
+        texlive-science \
+        texlive-fonts-recommended \
+        texlive-fonts-extra \
+        texlive-font-utils \
+        texlive-xetex \
+        texlive-luatex \
+        latexmk \
+        biber \
         python3 \
         python-pygments \
         gnuplot \
@@ -17,9 +31,7 @@ RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests
         appmenu-gtk2-module \
         appmenu-gtk3-module \
         libcanberra-gtk-module
-RUN apt remove --yes \
-        '^texlive-.*-doc$' \
-        2>&1 > apt.log || echo "Error at removal of packages"
+RUN apt remove --yes '^texlive-.*-doc$'
 RUN apt autoclean
 RUN apt --purge --yes autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
