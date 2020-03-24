@@ -1,4 +1,4 @@
-FROM ubuntu:artful
+FROM ubuntu:focal
 
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
@@ -40,3 +40,4 @@ RUN apt-get update \
  && apt-get autoclean \
  && apt-get --purge --yes autoremove \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ && update-alternatives --install /usr/bin/python python /usr/bin/python3 10
