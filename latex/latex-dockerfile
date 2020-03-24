@@ -1,23 +1,15 @@
 FROM ubuntu:focal
 
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ=Europe/Vienna
 RUN apt update
-RUN apt install --yes --no-install-recommends \
-        lmodern \
-        texlive-latex-base \
-        texlive-lang-german \
-        texlive-lang-english \
-        texlive-binaries \
-        texlive-latex-extra \
-        texlive-plain-generic \
-        texlive-science \
+RUN apt install --yes apt-utils
+RUN apt install --yes tzdata
+RUN ln -fs /usr/share/zoneinfo/Europe/Vienna /etc/localtime
+RUN dpkg-reconfigure tzdata
+RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests \
         texlive-full \
-        texlive-fonts-recommended \
-        texlive-fonts-extra \
-        texlive-font-utils \
-        texlive-xetex \
-        texlive-luatex \
-        latexmk \
-        biber \
+        python3 \
         python-pygments \
         gnuplot \
         make \
@@ -26,20 +18,8 @@ RUN apt install --yes --no-install-recommends \
         appmenu-gtk3-module \
         libcanberra-gtk-module
 RUN apt remove --yes \
-        texlive-latex-base-doc \
-        texlive-latex-recommended-doc \
-        texlive-latex-extra-doc \
-        texlive-fonts-recommended-doc \
-        texlive-fonts-extra-doc \
-        texlive-humanities-doc \
-        texlive-latex-base-doc \
-        texlive-latex-extra-doc \
-        texlive-latex-recommended-doc \
-        texlive-metapost-doc \
-        texlive-pictures-doc \
-        texlive-pstricks-doc \
-        texlive-publishers-doc \
-        texlive-science-doc
+        '^texlive-.*-doc$' \
+        2>&1 > apt.log || echo "Error at removal of packages"
 RUN apt autoclean
 RUN apt --purge --yes autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
