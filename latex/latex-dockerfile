@@ -9,7 +9,7 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 RUN dpkg-reconfigure tzdata
 RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests \
         texlive-full \
-        exlive-latex-base \
+        texlive-latex-base \
         texlive-lang-german \
         texlive-lang-english \
         texlive-binaries \
