@@ -1,3 +1,4 @@
+  GNU nano 4.8                                   Dockerfile                                               
 FROM ubuntu:focal
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -23,6 +24,7 @@ RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests
         texlive-luatex \
         latexmk \
         biber \
+        lmodern \
         python3 \
         python-pygments \
         gnuplot \
