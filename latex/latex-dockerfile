@@ -42,5 +42,5 @@ RUN apt-get update \
         texlive-science-doc \
  && apt autoclean \
  && apt --purge --yes autoremove \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 10
