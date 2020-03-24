@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 
 RUN apt-get update \
- && apt-get install --yes --no-install-recommends \
+ && apt install --yes --no-install-recommends \
         lmodern \
         texlive-latex-base \
         texlive-lang-german \
@@ -21,8 +21,11 @@ RUN apt-get update \
         python-pygments \
         gnuplot \
         make \
-        inkscape\
- && apt-get remove --yes \
+        inkscape \
+        appmenu-gtk2-module \
+        appmenu-gtk3-module \
+        libcanberra-gtk-module \
+ && apt remove --yes \
         texlive-latex-base-doc \
         texlive-latex-recommended-doc \
         texlive-latex-extra-doc \
@@ -37,7 +40,7 @@ RUN apt-get update \
         texlive-pstricks-doc \
         texlive-publishers-doc \
         texlive-science-doc \
- && apt-get autoclean \
- && apt-get --purge --yes autoremove \
+ && apt autoclean \
+ && apt --purge --yes autoremove \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 10
