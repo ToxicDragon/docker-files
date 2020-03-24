@@ -1,14 +1,14 @@
 FROM ubuntu:focal
 
-RUN apt-get update \
- && apt install --yes --no-install-recommends \
+RUN apt update
+RUN apt install --yes --no-install-recommends \
         lmodern \
         texlive-latex-base \
         texlive-lang-german \
         texlive-lang-english \
         texlive-binaries \
         texlive-latex-extra \
-        texlive-generic-extra \
+        texlive-plain-generic \
         texlive-science \
         texlive-full \
         texlive-fonts-recommended \
@@ -24,8 +24,8 @@ RUN apt-get update \
         inkscape \
         appmenu-gtk2-module \
         appmenu-gtk3-module \
-        libcanberra-gtk-module \
- && apt remove --yes \
+        libcanberra-gtk-module
+RUN apt remove --yes \
         texlive-latex-base-doc \
         texlive-latex-recommended-doc \
         texlive-latex-extra-doc \
@@ -39,8 +39,8 @@ RUN apt-get update \
         texlive-pictures-doc \
         texlive-pstricks-doc \
         texlive-publishers-doc \
-        texlive-science-doc \
- && apt autoclean \
- && apt --purge --yes autoremove \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+        texlive-science-doc
+RUN apt autoclean
+RUN apt --purge --yes autoremove
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
