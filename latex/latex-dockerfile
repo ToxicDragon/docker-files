@@ -14,7 +14,7 @@ RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests
         texlive-lang-english \
         texlive-binaries \
         texlive-latex-extra \
-        texlive-generic-extra \
+        texlive-plain-generic \
         texlive-science \
         texlive-fonts-recommended \
         texlive-fonts-extra \
