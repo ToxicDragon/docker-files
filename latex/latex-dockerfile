@@ -25,14 +25,14 @@ RUN apt install --yes --assume-yes --no-install-recommends --no-install-suggests
         biber \
         lmodern \
         python3 \
-        python-pygments \
+        python3-pygments \
         gnuplot \
         make \
         inkscape \
         appmenu-gtk2-module \
         appmenu-gtk3-module \
         libcanberra-gtk-module
-# RUN apt remove --yes '^texlive-.*-doc$'
+RUN apt remove --yes '^texlive-.*-doc$'
 RUN apt autoclean
 RUN apt --purge --yes autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
